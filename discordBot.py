@@ -3,7 +3,6 @@ import random
 import discord
 from discord.ext import commands, tasks
 from dotenv import load_dotenv
-import ticker
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -62,11 +61,6 @@ async def roll(ctx, number_of_dice: int, number_of_sides: int):
         for _ in range(number_of_dice)
         ]
     await ctx.send(', '.join(dice))
-
-@bot.command(name='Prices', help='Get Crypto prices')
-async def send_ticker_info(ctx, ticker_info: str):
-    results = ticker.get_ticker_info(ticker_info)
-    await ctx.send(results)
 
 @bot.command(name='create-channel')
 @commands.has_role('admin')
