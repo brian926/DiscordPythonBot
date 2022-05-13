@@ -8,41 +8,7 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
 
-client = discord.Client()
 bot = commands.Bot(command_prefix='!')
-
-
-# Client Section
-@client.event
-async def on_ready():
-    print(f'{client.user.name} the client has connected to Discord!')
-
-@client.event
-async def on_member_join(member):
-    await member.create_dm()
-    await member.dm_channel.send(
-        f'Hi {member.name}, welcome to my Discord server!'
-        )
-
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
-
-    if message.content == '99!':
-        response = '100'
-        await message.channel.send(response)
-    elif message.content == 'raise-exception':
-        raise discord.DiscordException
-
-@client.event
-async def on_error(event, *args, **kwargs):
-    with open('err.log', 'a') as f:
-        if event == 'on_message':
-            f.write(f'Unhandled message: {args[0]}\n')
-        else:
-            raise
-
 
 # Bot Section
 @bot.event
@@ -76,6 +42,4 @@ async def on_command_error(ctx, error):
     if isinstance(error, commands.error.CheckFailure):
         await ctx.send('You do not have the correct role for this command.')
 
-
 bot.run(TOKEN)
-client.run(TOKEN)
