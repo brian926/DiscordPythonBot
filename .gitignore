@@ -168,3 +168,9 @@ cython_debug/
 # Visual Studio 2015/2017 cache/options directory
 .vs/*
 .vs\*
+*.sqlite
+.vs/DiscordPythonBot/v16/.suo
+.vs/VSWorkspaceState.json
+.vs/DiscordPythonBot/v16/.suo
+.vs/slnx.sqlite
+.vs/VSWorkspaceState.json

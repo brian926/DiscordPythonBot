@@ -1,6 +1,7 @@
 import os
 import random
 import discord
+import dnd
 from discord.ext import commands, tasks
 from dotenv import load_dotenv
 
@@ -28,6 +29,25 @@ async def roll(ctx, number_of_dice: int, number_of_sides: int):
         ]
     await ctx.send(', '.join(dice))
 
+@bot.command(name='Resources', help='List out the different Resources to use')
+async def list_options(ctx):
+    print("Printing Resources")
+    response = dnd.list_endpoints()
+    await ctx.send(response)
+
+@bot.command(name='Options', help='List out the different options for a resource')
+async def list_options(ctx, endpoint: str):
+    print("Printing Options")
+    response = dnd.get_endpoints(endpoint)
+    await ctx.send(response)
+
+@bot.command(name='Details', help='Get details on an Option from the Resources')
+async def list_options(ctx, resource: str, option: str):
+    print("Printing Details")
+    response = dnd.get_details(resource, option)
+    await ctx.send(response)
+
+
 @bot.command(name='create-channel')
 @commands.has_role('admin')
 async def create_channel(ctx, channel_name='real-python'):
@@ -39,7 +59,7 @@ async def create_channel(ctx, channel_name='real-python'):
 
 @bot.event
 async def on_command_error(ctx, error):
-    if isinstance(error, commands.error.CheckFailure):
+    if isinstance(error, commands.errors.CheckFailure):
         await ctx.send('You do not have the correct role for this command.')
 
 bot.run(TOKEN)
