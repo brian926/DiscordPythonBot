@@ -11,30 +11,10 @@ def list_endpoints():
     options = ", ".join(list(obj.keys()))
     return options
 
-def list_spells():
-    spellsUrl = url + "/api/spells"
-    return list_json(requests.get(spellsUrl))
-
-def list_monsters():
-    monstersUrl = url + "/api/monsters"
-    return list_json(requests.get(monstersUrl))
-
 ### Get index of an item
 def get_endpoints(endpoints):
     endpointsUrl = url + "/api/{}".format(endpoints)
     return list_json(requests.get(endpointsUrl))
-
-def get_spells(spell):
-    spellUrl = url + "/api/spells/{}".format(spell)
-    return handle_json(requests.get(spellUrl))
-
-def get_monsters(monsters):
-    monstersUrl = url + "/api/monsters/{}".format(monsters)
-    return handle_json(requests.get(monstersUrl))
-
-def get_feature(feature):
-    featureUrl = url + "/api/features/{}".format(feature)
-    return handle_json(requests.get(featureUrl))
 
 def get_details(resource: str, option: str):
     details = url + "/api/{}/{}".format(resource, option)
@@ -58,24 +38,24 @@ def list_json(jsonText):
 
 def json_extract(obj):
     
-    testArr = []
+    arr = []
     keys = ['index', 'url']
-    def testRun(obj, testArr):
+    def testRun(obj, arr):
         if isinstance(obj, dict):
             for i in obj.items():
                 if isinstance(i[1], (dict, list)):
                     if isinstance(i[1],  list):
-                        testArr.append(i[0] + ' ----------')
-                    testRun(i[1], testArr)
+                        arr.append(i[0] + ' ----------')
+                    testRun(i[1], arr)
                 else:
                     if i[0] not in keys:
-                        testArr.append('{}: {}'.format(i[0], i[1]))
+                        arr.append('{}: {}'.format(i[0], i[1]))
         elif isinstance(obj, list):
             for item in obj:
-                testRun(item, testArr)
-        return testArr
+                testRun(item, arr)
+        return arr
 
-    testVal = testRun(obj, testArr)
-    return testVal
+    values = testRun(obj, arr)
+    return values
 
 print(get_details("races", "dwarf"))
