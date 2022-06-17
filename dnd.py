@@ -38,7 +38,9 @@ def get_feature(feature):
 
 def get_details(resource: str, option: str):
     details = url + "/api/{}/{}".format(resource, option)
-    return handle_this(requests.get(details))
+    jsonText = requests.get(details)
+    obj = json.loads(jsonText.text)
+    return json_extract(obj)
 
 ### JSON Formating
 def handle_json(jsonText):
@@ -54,13 +56,26 @@ def list_json(jsonText):
             names.append(spellName['name'])
     return ', '.join(names)
 
-def handle_this(jsonText):
-    obj = json.loads(jsonText.text)
-    for key in obj.keys():
-        print(key, obj[key])
-        if isinstance(obj[key], list) == True:
-            for item in obj[key]:
-                if 'name' in item:
-                    print(key, item['name'])
+def json_extract(obj):
+    
+    testArr = []
+    keys = ['index', 'url']
+    def testRun(obj, testArr):
+        if isinstance(obj, dict):
+            for i in obj.items():
+                if isinstance(i[1], (dict, list)):
+                    if isinstance(i[1],  list):
+                        testArr.append(i[0] + ' ----------')
+                    testRun(i[1], testArr)
+                else:
+                    if i[0] not in keys:
+                        testArr.append('{}: {}'.format(i[0], i[1]))
+        elif isinstance(obj, list):
+            for item in obj:
+                testRun(item, testArr)
+        return testArr
+
+    testVal = testRun(obj, testArr)
+    return testVal
 
 print(get_details("races", "dwarf"))
