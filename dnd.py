@@ -58,4 +58,4 @@ def json_extract(obj):
     values = testRun(obj, arr)
     return values
 
-print(get_details("races", "dwarf"))
+#print(get_details("races", "dwarf"))
