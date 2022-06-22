@@ -8,7 +8,7 @@ def list_endpoints():
     endpointUrl = url + "/api"
     response = requests.get(endpointUrl)
     obj = json.loads(response.text)
-    options = ", ".join(list(obj.keys()))
+    options = list(obj.keys())
     return options
 
 ### Get index of an item
@@ -57,5 +57,3 @@ def json_extract(obj):
 
     values = testRun(obj, arr)
     return values
-
-#print(get_details("races", "dwarf"))

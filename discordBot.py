@@ -18,35 +18,33 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 
 # Classes for Dropdown
 class Dropdown(discord.ui.Select):
-    def __init__(self):
+    def __init__(self, resources):
+        self.resources = resources
 
         # Set the options that will be presented inside the dropdown
-        options = [
-            discord.SelectOption(label='Red', description='Your favourite colour is red', emoji='🟥'),
-            discord.SelectOption(label='Green', description='Your favourite colour is green', emoji='🟩'),
-            discord.SelectOption(label='Blue', description='Your favourite colour is blue', emoji='🟦')
-        ]
+        option = []
+
+        for item in resources:
+            option.append(discord.SelectOption(label=item.capitalize()))
 
         # The placeholder is what will be shown when no option is chosen
         # The min and max values indicate we can only pick one of the three options
         # The options parameter defines the dropdown options. We defined this above
-        super().__init__(placeholder='Choose your favourite colour...', min_values=1, max_values=1, options=options)
+        super().__init__(placeholder='Choose your favourite colour...', min_values=1, max_values=1, options=option)
 
     async def callback(self, interaction: discord.Interaction):
         # Use the interaction object to send a response message containing
         # the user's favourite colour or choice. The self object refers to the
         # Select object, and the values attribute gets a list of the user's 
         # selected options. We only want the first one.
-        await interaction.response.send_message(f'Your favourite colour is {self.values[0]}')
+        response = dnd.get_endpoints(self.values[0])
+        await interaction.response.send_message(response)
 
 
 # Class for View to add Select to
 class DropdownView(discord.ui.View):
     def __init__(self):
         super().__init__()
-
-        # Adds the dropdown to our view object.
-        self.add_item(Dropdown())
 
 # Bot Section
 @bot.event
@@ -55,7 +53,8 @@ async def on_ready():
 
 @bot.command(name='24', help='Test run of the help comand')
 async def twenty_four(ctx):
-    view = DropdownView()
+    resources = dnd.list_endpoints()
+    view = DropdownView().add_item(Dropdown(resources))
 
     # Sending a message containing our view
     await ctx.send('Pick your favourite colour:', view=view)
