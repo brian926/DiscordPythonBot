@@ -66,10 +66,15 @@ async def list_options3(ctx: lightbulb.Context) -> None:
     response = dnd.get_details(resource, option)
     await ctx.respond(response)
 
+test = ['1', '2', '34']
+
 @bot.command
+@lightbulb.option('test4', 'test this out', choices=test)
 @lightbulb.command('ping', 'Says pong!')
 @lightbulb.implements(lightbulb.SlashCommand)
 async def ping(ctx):
     await ctx.respond('Pong!')
+
+
 
 bot.run()
